@@ -4,7 +4,13 @@ let sales = [
   { order: '#QSL-1046', initials: 'JR', customer: 'Jamie Rivera', email: 'jamie.rivera@email.com', phone: '(555) 210-1138', item: 'Gibson Les Paul Studio', channel: 'Website', amount: '$1,299.00' },
   { order: '#QSL-1045', initials: 'NK', customer: 'Noah Kim', email: 'noah.kim@email.com', phone: '(555) 210-5590', item: 'Squier Classic Vibe 60s', channel: 'In-store', amount: '$429.00' }
 ];
-let customers = sales.map(sale => ({ name: sale.customer, email: sale.email, phone: sale.phone, orders: 1, spent: sale.amount }));
+const defaultEngagement = {
+  'marcus.lee@email.com': { outreach: 4, chats: [{ time: 'Today, 10:24 AM', message: 'Thanks for helping me compare the Stratocaster options.', reply: 'You’re welcome. The Player Strat is still held for you until 6 PM.' }, { time: 'Oct 22, 3:18 PM', message: 'Is the Fender Player Stratocaster still available?', reply: 'Yes, it is available on the shop floor.' }] },
+  'avery.smith@email.com': { outreach: 2, chats: [{ time: 'Oct 20, 11:02 AM', message: 'Do you offer local pickup?', reply: 'Yes, your Taylor is ready for pickup at the front desk.' }] },
+  'jamie.rivera@email.com': { outreach: 6, chats: [{ time: 'Oct 19, 4:41 PM', message: 'I’d like to see more photos of the Les Paul neck.', reply: 'I sent those over and added them to your order.' }] },
+  'noah.kim@email.com': { outreach: 1, chats: [{ time: 'Oct 18, 9:12 AM', message: 'Can I trade in another guitar toward this purchase?', reply: 'Absolutely. Bring it in and we can appraise it.' }] }
+};
+let customers = sales.map(sale => ({ name: sale.customer, email: sale.email, phone: sale.phone, orders: 1, spent: sale.amount, ...(defaultEngagement[sale.email] || { outreach: 0, chats: [] }) }));
 let inventory = [
   { name: 'Fender Player Stratocaster', brand: 'Fender', sku: 'QSL-FEN-104', condition: 'Excellent', location: 'Floor A · 04', price: '$1,149.00', stock: 2, type: '' },
   { name: 'Taylor 214ce-K', brand: 'Taylor', sku: 'QSL-TAY-082', condition: 'Very good', location: 'Floor A · 11', price: '$899.00', stock: 1, type: 'blue-art' },
@@ -29,7 +35,16 @@ function renderCustomers(query = '') {
   const normalized = query.toLowerCase();
   const filtered = customers.filter(customer => `${customer.name} ${customer.email} ${customer.phone}`.toLowerCase().includes(normalized));
   document.getElementById('customer-count').textContent = filtered.length;
-  document.getElementById('customer-grid').innerHTML = filtered.map(customer => `<article class="customer-card"><div class="customer-card-top"><span class="customer-avatar">${customer.name.split(' ').map(part => part[0]).join('').slice(0, 2)}</span><span class="customer-orders">${customer.orders} ${customer.orders === 1 ? 'order' : 'orders'}</span></div><h2>${customer.name}</h2><p>${customer.email}</p><p>${customer.phone || 'No phone added'}</p><div class="customer-spend"><span>Total spent</span><b>${customer.spent}</b></div></article>`).join('') || '<div class="empty-customers">No customers match your search.</div>';
+  document.getElementById('customer-grid').innerHTML = filtered.map(customer => `<article class="customer-card" tabindex="0" data-customer-email="${customer.email}"><div class="customer-card-top"><span class="customer-avatar">${customer.name.split(' ').map(part => part[0]).join('').slice(0, 2)}</span><span class="customer-orders">${customer.orders} ${customer.orders === 1 ? 'order' : 'orders'}</span></div><h2>${customer.name}</h2><p>${customer.email}</p><p>${customer.phone || 'No phone added'}</p><div class="customer-spend"><span>Total spent</span><b>${customer.spent}</b></div></article>`).join('') || '<div class="empty-customers">No customers match your search.</div>';
+}
+function renderCustomerDetail(email) {
+  const customer = customers.find(record => record.email === email);
+  if (!customer) return;
+  const purchases = sales.filter(sale => sale.email === email);
+  const engagement = customer.chats || [];
+  document.getElementById('customer-detail-content').innerHTML = `<div class="detail-header"><span class="customer-avatar detail-avatar">${customer.name.split(' ').map(part => part[0]).join('').slice(0, 2)}</span><div><h2>${customer.name}</h2><p>${customer.email} · ${customer.phone || 'No phone added'}</p></div></div><div class="detail-stats"><div class="detail-stat"><span>Guitars bought</span><b>${purchases.length}</b></div><div class="detail-stat"><span>Times reached out</span><b>${customer.outreach || 0}</b></div><div class="detail-stat"><span>Total spent</span><b>${customer.spent}</b></div></div><div class="detail-section"><h3>Guitars purchased</h3>${purchases.map(sale => `<div class="purchase-row">${icon('guitar')}<div><b>${sale.item}</b><small>${sale.order} · ${sale.channel}</small></div><span class="purchase-price">${sale.amount}</span></div>`).join('') || '<p class="empty-detail">No guitars purchased yet.</p>'}</div><div class="detail-section"><h3>Recent website chats</h3>${engagement.map(chat => `<div class="chat-row"><span class="chat-bubble">${icon('message-circle')}</span><div><b>${chat.message}</b><small>${chat.time}</small><small><strong>Q's Loan:</strong> ${chat.reply}</small></div></div>`).join('') || '<p class="empty-detail">No website chats recorded yet.</p>'}</div>`;
+  document.getElementById('customer-detail-modal').classList.remove('hidden');
+  refreshIcons();
 }
 function guitarIcon(type = '') { return `<span class="item-art ${type}">${icon('guitar')}</span>`; }
 function renderLowStock() {
@@ -75,12 +90,16 @@ document.addEventListener('click', event => {
   if (event.target.closest('#add-customer-button')) document.getElementById('customer-modal').classList.remove('hidden');
   if (event.target.closest('.close-sale-modal') || event.target.id === 'sale-modal') document.getElementById('sale-modal').classList.add('hidden');
   if (event.target.closest('.close-customer-modal') || event.target.id === 'customer-modal') document.getElementById('customer-modal').classList.add('hidden');
+  if (event.target.closest('.close-detail-modal') || event.target.id === 'customer-detail-modal') document.getElementById('customer-detail-modal').classList.add('hidden');
+  const customerCard = event.target.closest('[data-customer-email]');
+  if (customerCard) renderCustomerDetail(customerCard.dataset.customerEmail);
   const filter = event.target.closest('.filter');
   if (filter) { document.querySelectorAll('.filter').forEach(button => button.classList.remove('active-filter')); filter.classList.add('active-filter'); renderInventory(filter.dataset.filter, document.getElementById('inventory-search').value); }
 });
 document.getElementById('inventory-search')?.addEventListener('input', event => { const filter = document.querySelector('.active-filter')?.dataset.filter || 'all'; renderInventory(filter, event.target.value); });
 document.getElementById('sales-search')?.addEventListener('input', event => { const query = event.target.value.toLowerCase(); document.getElementById('sales-body').innerHTML = sales.filter(sale => `${sale.order} ${sale.customer} ${sale.item}`.toLowerCase().includes(query)).map(sale => `<tr><td>${sale.order}</td><td><div class="order-customer"><span class="mini-avatar">${sale.initials}</span><strong>${sale.customer}</strong></div></td><td>${sale.item}</td><td><span class="channel-tag">${sale.channel}</span></td><td><strong>${sale.amount}</strong></td><td><span class="status-tag paid">Paid</span></td></tr>`).join(''); });
 document.getElementById('customer-search')?.addEventListener('input', event => renderCustomers(event.target.value));
+document.getElementById('customer-grid')?.addEventListener('keydown', event => { if (event.key === 'Enter' || event.key === ' ') { const card = event.target.closest('[data-customer-email]'); if (card) { event.preventDefault(); renderCustomerDetail(card.dataset.customerEmail); } } });
 document.getElementById('sale-item-select')?.addEventListener('change', event => { const option = event.target.selectedOptions[0]; document.querySelector('#sale-form [name="amount"]').value = option?.dataset.price || ''; });
 document.getElementById('item-form').addEventListener('submit', event => {
   event.preventDefault(); const form = new FormData(event.target); const price = Number(form.get('price')).toLocaleString('en-US', { style: 'currency', currency: 'USD' });
@@ -90,12 +109,12 @@ document.getElementById('item-form').addEventListener('submit', event => {
 document.getElementById('sale-form').addEventListener('submit', event => {
   event.preventDefault(); const form = new FormData(event.target); const customerEmail = form.get('email').toLowerCase(); const amount = Number(form.get('amount')).toLocaleString('en-US', { style: 'currency', currency: 'USD' }); const name = form.get('customer'); const initials = name.split(' ').map(part => part[0]).join('').slice(0, 2).toUpperCase();
   const existingCustomer = customers.find(customer => customer.email.toLowerCase() === customerEmail);
-  if (existingCustomer) { existingCustomer.orders += 1; existingCustomer.spent = `$${(Number(existingCustomer.spent.replace(/[$,]/g, '')) + Number(form.get('amount'))).toLocaleString('en-US', { minimumFractionDigits: 2 })}`; } else customers.unshift({ name, email: form.get('email'), phone: form.get('phone'), orders: 1, spent: amount });
+  if (existingCustomer) { existingCustomer.orders += 1; existingCustomer.spent = `$${(Number(existingCustomer.spent.replace(/[$,]/g, '')) + Number(form.get('amount'))).toLocaleString('en-US', { minimumFractionDigits: 2 })}`; } else customers.unshift({ name, email: form.get('email'), phone: form.get('phone'), orders: 1, spent: amount, outreach: 0, chats: [] });
   sales.unshift({ order: `#QSL-${1049 + sales.length}`, initials, customer: name, email: form.get('email'), phone: form.get('phone'), item: form.get('item'), channel: form.get('channel'), amount });
   const soldItem = inventory.find(item => item.name === form.get('item')); if (soldItem && soldItem.stock > 0) soldItem.stock -= 1;
   event.target.reset(); document.getElementById('sale-modal').classList.add('hidden'); renderSales(); renderLowStock(); showView('sales'); showToast(`Sale recorded for ${name}`);
 });
 document.getElementById('customer-form').addEventListener('submit', event => {
-  event.preventDefault(); const form = new FormData(event.target); const name = form.get('name'); customers.unshift({ name, email: form.get('email'), phone: form.get('phone'), orders: 0, spent: '$0.00' }); event.target.reset(); document.getElementById('customer-modal').classList.add('hidden'); renderCustomers(); showToast(`${name} added to customers`);
+  event.preventDefault(); const form = new FormData(event.target); const name = form.get('name'); customers.unshift({ name, email: form.get('email'), phone: form.get('phone'), orders: 0, spent: '$0.00', outreach: 0, chats: [] }); event.target.reset(); document.getElementById('customer-modal').classList.add('hidden'); renderCustomers(); showToast(`${name} added to customers`);
 });
 renderSales(); renderLowStock(); renderInventory(); renderCustomers(); refreshIcons();
