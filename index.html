@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#10251f" />
+    <title>Q's Loan | Guitar POS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand"><span class="brand-mark">Q</span><span><strong>Q's Loan</strong><small>GUARANTEED GOODS</small></span></div>
+        <div class="store-switcher"><span class="status-dot"></span><span><b>Downtown Shop</b><small>Open · POS-01</small></span><i data-lucide="chevrons-up-down"></i></div>
+        <nav class="main-nav" aria-label="Main navigation">
+          <p class="nav-label">Workspace</p>
+          <button class="nav-item active" data-view="overview"><i data-lucide="layout-dashboard"></i>Overview</button>
+          <button class="nav-item" data-view="inventory"><i data-lucide="guitar"></i>Inventory <span class="nav-count">48</span></button>
+          <button class="nav-item" data-view="sales"><i data-lucide="receipt-text"></i>Sales</button>
+          <button class="nav-item" data-view="customers"><i data-lucide="users"></i>Customers</button>
+          <p class="nav-label second">Manage</p>
+          <button class="nav-item" data-view="integrations"><i data-lucide="plug-zap"></i>Integrations <span class="connected-pill">2</span></button>
+          <button class="nav-item" data-view="reports"><i data-lucide="chart-no-axes-combined"></i>Reports</button>
+        </nav>
+        <div class="sidebar-footer"><button class="nav-item"><i data-lucide="settings-2"></i>Settings</button><div class="user-card"><div class="avatar">JT</div><span><b>Jordan Taylor</b><small>Store admin</small></span><i data-lucide="more-horizontal"></i></div></div>
+      </aside>
+
+      <main class="main-content">
+        <header class="topbar"><button class="mobile-menu icon-button" aria-label="Open menu"><i data-lucide="menu"></i></button><div class="breadcrumbs"><span>Workspace</span><i data-lucide="chevron-right"></i><b id="page-breadcrumb">Overview</b></div><div class="topbar-actions"><button class="icon-button" aria-label="Help"><i data-lucide="circle-help"></i></button><button class="icon-button notification" aria-label="Notifications"><i data-lucide="bell"></i><span></span></button><div class="top-avatar">JT</div></div></header>
+
+        <div class="page-view" id="overview-view">
+          <section class="page-heading"><div><p class="eyebrow">Tuesday, October 24, 2024</p><h1>Good morning, Jordan <span>✦</span></h1><p class="heading-sub">Here’s what’s moving at Downtown Shop today.</p></div><button class="primary-button" id="new-sale-button"><i data-lucide="plus"></i>New sale</button></section>
+          <section class="stat-grid">
+            <article class="stat-card"><div class="stat-top"><span class="stat-icon green"><i data-lucide="banknote"></i></span><span class="trend up">+12.4% <i data-lucide="arrow-up-right"></i></span></div><p>Today’s sales</p><strong>$2,840.00</strong><small>vs. $2,527 last Tuesday</small></article>
+            <article class="stat-card"><div class="stat-top"><span class="stat-icon orange"><i data-lucide="package-check"></i></span><span class="trend up">+6 <i data-lucide="arrow-up-right"></i></span></div><p>Units sold</p><strong>14</strong><small>Across 9 transactions</small></article>
+            <article class="stat-card"><div class="stat-top"><span class="stat-icon blue"><i data-lucide="boxes"></i></span><span class="trend neutral">Good standing</span></div><p>Inventory value</p><strong>$184,290</strong><small>48 guitars in stock</small></article>
+            <article class="stat-card"><div class="stat-top"><span class="stat-icon plum"><i data-lucide="refresh-cw"></i></span><span class="trend sync"><span class="sync-dot"></span>Live</span></div><p>Channels synced</p><strong>2 / 2</strong><small>Website · Shopify</small></article>
+          </section>
+          <section class="dashboard-grid">
+            <article class="panel sales-panel"><div class="panel-heading"><div><h2>Sales overview</h2><p>Revenue across all channels</p></div><button class="select-button">Last 7 days <i data-lucide="chevron-down"></i></button></div><div class="chart-wrap"><div class="chart-y"><span>$4k</span><span>$3k</span><span>$2k</span><span>$1k</span><span>$0</span></div><div class="chart-area"><div class="grid-lines"></div><svg viewBox="0 0 700 220" preserveAspectRatio="none" aria-label="Sales chart"><defs><linearGradient id="fill" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#1f8d67" stop-opacity=".22"/><stop offset="100%" stop-color="#1f8d67" stop-opacity="0"/></linearGradient></defs><path class="area" d="M0,170 C32,158 48,172 76,135 S123,148 151,118 S194,138 224,102 S270,121 300,80 S346,97 378,112 S423,91 450,99 S495,50 523,72 S558,53 588,63 S630,30 700,38 L700,220 L0,220 Z"/><path class="line" d="M0,170 C32,158 48,172 76,135 S123,148 151,118 S194,138 224,102 S270,121 300,80 S346,97 378,112 S423,91 450,99 S495,50 523,72 S558,53 588,63 S630,30 700,38"/></svg><div class="chart-labels"><span>Oct 18</span><span>Oct 19</span><span>Oct 20</span><span>Oct 21</span><span>Oct 22</span><span>Oct 23</span><span>Oct 24</span></div></div></div></article>
+            <article class="panel channel-panel"><div class="panel-heading"><div><h2>Channel health</h2><p>Everything is in sync</p></div><i class="green-check" data-lucide="check-circle-2"></i></div><div class="channel-row"><div class="channel-icon shopify">S</div><div><b>Shopify store</b><small>Last synced 2 min ago</small></div><span class="online"><i></i>Connected</span></div><div class="channel-row"><div class="channel-icon website"><i data-lucide="globe-2"></i></div><div><b>qsloanshop.com</b><small>Last synced 5 min ago</small></div><span class="online"><i></i>Connected</span></div><button class="outline-button full" data-view="integrations">Manage integrations <i data-lucide="arrow-up-right"></i></button></article>
+          </section>
+          <section class="lower-grid"><article class="panel"><div class="panel-heading"><div><h2>Recent sales</h2><p>Your latest transactions</p></div><button class="text-button" data-view="sales">View all <i data-lucide="arrow-right"></i></button></div><div class="table-scroll"><table><thead><tr><th>Order</th><th>Customer</th><th>Item</th><th>Channel</th><th>Amount</th><th>Status</th></tr></thead><tbody id="recent-sales"></tbody></table></div></article><aside class="panel low-stock"><div class="panel-heading"><div><h2>Low stock</h2><p>Items that need attention</p></div><span class="alert-count">4</span></div><div id="low-stock-list"></div><button class="outline-button full" data-view="inventory">View inventory <i data-lucide="arrow-up-right"></i></button></aside></section>
+        </div>
+
+        <div class="page-view hidden" id="inventory-view"><section class="page-heading inventory-heading"><div><p class="eyebrow">Catalog & stock</p><h1>Inventory</h1><p class="heading-sub">48 instruments across your shop and online channels.</p></div><button class="primary-button" id="add-item-button"><i data-lucide="plus"></i>Add item</button></section><section class="inventory-toolbar"><div class="search-box"><i data-lucide="search"></i><input id="inventory-search" placeholder="Search by name, SKU, or brand" /></div><div class="filter-group"><button class="select-button filter active-filter" data-filter="all">All items <span>48</span><i data-lucide="chevron-down"></i></button><button class="select-button filter" data-filter="low">Low stock <span>4</span></button><button class="select-button filter" data-filter="draft">Drafts <span>2</span></button></div></section><section class="panel inventory-panel"><div class="inventory-summary"><span><b id="inventory-count">6</b> items shown</span><span class="sync-note"><i data-lucide="cloud-check"></i>Synced moments ago</span></div><div class="table-scroll"><table class="inventory-table"><thead><tr><th class="check-col"><input type="checkbox" /></th><th>Item</th><th>SKU</th><th>Condition</th><th>Location</th><th>Price</th><th>Stock</th><th>Channels</th><th></th></tr></thead><tbody id="inventory-body"></tbody></table></div></section></div>
+
+        <div class="page-view hidden" id="integrations-view"><section class="page-heading"><div><p class="eyebrow">Connected channels</p><h1>Integrations</h1><p class="heading-sub">Keep your website and Shopify inventory in one place.</p></div></section><section class="integration-grid"><article class="integration-card connected-card"><div class="integration-top"><div class="large-channel-icon shopify">S</div><span class="connected-label"><i></i>Connected</span></div><h2>Shopify</h2><p>Products, prices, stock, and orders sync automatically with your Shopify store.</p><div class="integration-detail"><span>Store</span><b>qs-loans.myshopify.com</b></div><div class="integration-detail"><span>Last synced</span><b>2 minutes ago</b></div><button class="outline-button full"><i data-lucide="settings-2"></i>Configure Shopify</button></article><article class="integration-card connected-card"><div class="integration-top"><div class="large-channel-icon website"><i data-lucide="globe-2"></i></div><span class="connected-label"><i></i>Connected</span></div><h2>Personal website</h2><p>Show available instruments and send checkout-ready orders from your own site.</p><div class="integration-detail"><span>Domain</span><b>qsloanshop.com</b></div><div class="integration-detail"><span>Last synced</span><b>5 minutes ago</b></div><button class="outline-button full"><i data-lucide="code-2"></i>View embed code</button></article><article class="integration-card add-integration"><div class="plus-circle"><i data-lucide="plus"></i></div><h2>Add a channel</h2><p>Connect another storefront, marketplace, or accounting tool.</p><button class="text-button">Browse integrations <i data-lucide="arrow-right"></i></button></article></section></div>
+      </main>
+    </div>
+    <div class="toast" id="toast"><i data-lucide="check-circle-2"></i><span>Sale started</span></div>
+    <div class="modal-backdrop hidden" id="item-modal"><div class="modal"><div class="modal-header"><div><p class="eyebrow">Catalog</p><h2>Add inventory item</h2></div><button class="icon-button close-modal"><i data-lucide="x"></i></button></div><form id="item-form"><label>Instrument name<input required name="name" placeholder="e.g. Fender Player Stratocaster" /></label><div class="form-row"><label>Brand<input required name="brand" placeholder="Fender" /></label><label>Price<input required name="price" type="number" min="0" placeholder="1299" /></label></div><div class="form-row"><label>SKU<input required name="sku" placeholder="QSL-0000" /></label><label>Stock<input required name="stock" type="number" min="0" value="1" /></label></div><button class="primary-button full" type="submit">Add to inventory <i data-lucide="arrow-right"></i></button></form></div></div>
+    <script src="https://unpkg.com/lucide@latest"></script><script src="app.js"></script>
+  </body>
+</html>
